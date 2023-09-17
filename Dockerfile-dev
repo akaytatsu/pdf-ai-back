@@ -1,0 +1,13 @@
+FROM rust:1.72
+
+RUN mkdir /app -p
+WORKDIR /app
+
+COPY ./ ./
+
+RUN cargo install diesel_cli --no-default-features --features postgres
+RUN cargo install cargo-watch
+
+EXPOSE 8080
+
+CMD ["cargo", "watch", "-x", "run"]
