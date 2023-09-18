@@ -39,7 +39,7 @@ async fn create_document(MultipartForm(form): MultipartForm<UploadForm>) -> Http
 
     let mut form = form;
     let temp_file = form.files.remove(0);
-    save_file(temp_file);
+    save_file(temp_file).await;
 
     HttpResponse::Ok().finish()
 }
@@ -64,6 +64,8 @@ async fn get_document_file(id: web::Path<String>) -> Result<NamedFile> {
 #[get("/{id}/conversation")]
 async fn get_document_conversation(id: web::Path<String>) -> impl Responder {
     let _resp = get_conversations(id.into_inner());
+
+    println!("resp33333: {:?}", _resp);
 
     HttpResponse::Ok().json(_resp)
 }

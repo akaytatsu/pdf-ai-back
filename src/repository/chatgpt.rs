@@ -3,11 +3,16 @@ use chatgpt::prelude::*;
 use super::utils::get_file_path;
 
 fn chatgpt_client() -> ChatGPT {
-    let client = ChatGPT::new("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");
+    dotenv::dotenv().ok();
+
+    let api_key = std::env::var("API_CHATGPT_KEY").expect("CHATGPT_API_KEY not set");
+
+    let client = ChatGPT::new(api_key);
 
     client.unwrap()
 }
-pub fn send_message(message: String, unique_id: String) -> String {
+
+pub async fn send_message(message: String, unique_id: String) -> String {
     let client = chatgpt_client();
 
     let _message = limit_message_to_tokens(&message, 1000);
@@ -33,7 +38,7 @@ pub fn send_message(message: String, unique_id: String) -> String {
 
     // let resp = conversation.send_message(message).await;
     println!("555555555555555555555555");
-    let resp = futureconversation
+    let resp = conversation
         .send_message("qual o maior panela do mundo?")
         .await;
 

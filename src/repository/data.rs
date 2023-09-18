@@ -35,7 +35,7 @@ pub fn list_folders() -> Result<Json<Vec<Folder>>, ()> {
     Ok(Json(folders))
 }
 
-pub fn save_file(file: TempFile) -> String {
+pub async fn save_file(file: TempFile) -> String {
     let file_name = file.file_name.clone().unwrap();
     let name_without_ext = file_name.split('.').collect::<Vec<&str>>()[0];
     let dir = format!("./media/{}", name_without_ext);
@@ -71,14 +71,7 @@ pub fn save_file(file: TempFile) -> String {
 
     // let rt = tokio::runtime::Runtime::new().unwrap();
 
-    futures::executor::block_on(send_message(
-        pergunta,
-        String::from_str(name_without_ext).unwrap(),
-    ));
-
-    // rt.block_on(async {
-    //     send_message(pergunta, String::from_str(name_without_ext).unwrap()).await;
-    // });
+    send_message(pergunta, String::from_str(name_without_ext).unwrap()).await;
 
     file_path
 }
@@ -96,7 +89,6 @@ pub fn get_file(id: String) -> Result<Json<Folder>, ()> {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Conversation {
-    pub id: String,
     pub role: String,
     pub content: String,
 }
@@ -106,14 +98,24 @@ pub fn get_conversations(id: String) -> Vec<Conversation> {
 
     let path_json = get_file_path(&id, "json");
 
+    println!("path_json: {}", path_json);
+
     let json_data = match fs::read_to_string(path_json) {
         Ok(path_json) => path_json,
-        Err(_) => return conversations,
+        Err(e) => {
+            println!("erro ao ler json 11, err: {}", e);
+            return conversations;
+        }
     };
 
-    let _json_data: serde_json::Value = match serde_json::from_str(&json_data) {
+    println!("json_data: {}", json_data);
+
+    let conversations: Vec<Conversation> = match serde_json::from_str(&json_data) {
         Ok(json_data) => json_data,
-        Err(_) => return conversations,
+        Err(e) => {
+            println!("erro ao ler json 11, err: {}", e);
+            return conversations;
+        }
     };
 
     conversations
