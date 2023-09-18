@@ -6,16 +6,21 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-diesel = { version = "2.1.0", features = ["r2d2", "postgres"] }
 dotenv = "0.15.0"
-serde = "1.0.188"
+serde = { versionn = "1.0.188", features = ["derive"] }
 actix-web = "4.4.0"
-r2d2-diesel = "1.0.0"
-r2d2 = "0.8.10"
 chrono = "0.4.30"
 serde_json = "1.0.106"
-jsonwebtoken = "8.3.0"
 cronos = "0.0.1"
 futures = "0.3.28"
 rust-crypto = "0.2.36"
 validator = { version = "0.15", features = ["derive"] }
+actix-multipart = "0.6.1"
+tempfile = "3.8.0"
+actix-files = "0.6.2"
+futures-util = "0.3.28"
+actix-web-lab = "0.19.1"
+parking_lot = "0.12.1"
+chatgpt_rs = "1.2.3"
+pdf-extract = "0.7.2"
+tokio = { version = "1.32.0", features = ["full"] }

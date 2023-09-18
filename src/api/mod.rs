@@ -1,3 +1,2 @@
-pub mod middlewares;
-pub mod repositories;
-pub mod users;
+pub mod broadcast;
+pub mod document;
